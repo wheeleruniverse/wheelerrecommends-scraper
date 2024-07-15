@@ -1,3 +1,4 @@
+import argparse
 import json
 import time
 
@@ -21,9 +22,12 @@ def click_view_more(driver: webdriver.Chrome):
     view_more_button.click()
 
 
-def scrape():
+def scrape(view_more_clicks: int):
     """
     Scrapes the 'wheelerrecommends' home page and returns the results as a HomePage object.
+
+    Args:
+        view_more_clicks (int): the number of times to click the 'View More' button.
 
     Returns:
         HomePage: a HomePage object.
@@ -39,7 +43,7 @@ def scrape():
     # wait because website is dynamically loaded
     time.sleep(5)
 
-    for _ in range(5):
+    for _ in range(view_more_clicks):
         time.sleep(1)
         click_view_more(driver)
 
@@ -59,14 +63,24 @@ def scrape():
                 details_link=poster.select_one('a')['href'],
             ))
 
-    driver.quit()
-
     return HomePage(
         page_url=driver.current_url,
-        recommendations=movies
+        recommendations=movies,
+        view_more_clicks=view_more_clicks
     )
 
 
 if __name__ == '__main__':
-    data = scrape()
+    parser = argparse.ArgumentParser('home-page-scraper')
+    parser.add_argument(
+        '--view_more_clicks',
+        default=1,
+        help='the number of times to click the "View More" button',
+        required=False,
+        type=int
+    )
+
+    args = parser.parse_args()
+
+    data = scrape(args.view_more_clicks)
     print(json.dumps(data, default=lambda o: o.__dict__, indent=4, sort_keys=True))

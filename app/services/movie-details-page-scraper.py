@@ -53,7 +53,7 @@ def scrape(movie_id: str):
     driver.maximize_window()
 
     # wait because website is dynamically loaded
-    time.sleep(5)
+    time.sleep(3)
 
     # scrape the website
     soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -71,8 +71,6 @@ def scrape(movie_id: str):
                 details_link=poster.select_one('a')['href'],
             ))
 
-    driver.quit()
-
     return MovieDetailsPage(
         page_url=driver.current_url,
         details=scrape_movie_details(movie_id, soup),
@@ -83,6 +81,8 @@ def scrape(movie_id: str):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('movie-details-page-scraper')
     parser.add_argument('movie_id', help='any "movie_id" to build the "details_link" programmatically')
+
     args = parser.parse_args()
+
     data = scrape(args.movie_id)
     print(json.dumps(data, default=lambda o: o.__dict__, indent=4, sort_keys=True))
