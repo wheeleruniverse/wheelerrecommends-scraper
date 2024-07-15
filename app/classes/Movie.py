@@ -23,6 +23,9 @@ class Movie:
             movie_name (str): a truncated version of the movie name and year.
             movie_poster (str): the poster filename.
             details_link (str): the link to the details page.
+
+        Returns:
+            Movie: a Movie object.
         """
 
         self.movie_id = movie_id

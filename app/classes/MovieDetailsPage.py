@@ -19,6 +19,9 @@ class MovieDetailsPage:
             page_url (str): the url of the page.
             details (MovieDetails): a MovieDetails object.
             recommendations (Movie[]): a Movie[] object.
+
+        Returns:
+            MovieDetailsPage: a MovieDetailsPage object.
         """
 
         self.page_url = page_url

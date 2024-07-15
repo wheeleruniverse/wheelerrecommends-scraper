@@ -17,8 +17,13 @@ class HomePage:
         Args:
             page_url (str): the url of the page.
             recommendations (Movie[]): a Movie[] object.
+
+        Returns:
+            HomePage: a HomePage object.
         """
 
+        if recommendations is None:
+            recommendations = []
         self.page_url = page_url
         self.recommendations = recommendations
 
