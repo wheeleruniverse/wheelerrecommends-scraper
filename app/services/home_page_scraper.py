@@ -22,19 +22,17 @@ def click_view_more(driver: webdriver.Chrome):
     view_more_button.click()
 
 
-def scrape(view_more_clicks: int):
+def scrape(driver: webdriver.Chrome, view_more_clicks: int):
     """
     Scrapes the 'wheelerrecommends' home page and returns the results as a HomePage object.
 
     Args:
+        driver (webdriver): Chrome webdriver instance.
         view_more_clicks (int): the number of times to click the 'View More' button.
 
     Returns:
         HomePage: a HomePage object.
     """
-
-    # create driver
-    driver = webdriver.Chrome()
 
     # load and maximize website
     driver.get('https://wheelerrecommends.com/')
@@ -82,5 +80,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    data = scrape(args.view_more_clicks)
+    data = scrape(webdriver.Chrome(), args.view_more_clicks)
     print(json.dumps(data, default=lambda o: o.__dict__, indent=4, sort_keys=True))

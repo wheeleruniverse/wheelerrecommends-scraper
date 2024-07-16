@@ -34,19 +34,17 @@ def scrape_movie_details(movie_id: str, soup: BeautifulSoup):
     )
 
 
-def scrape(movie_id: str):
+def scrape(driver: webdriver.Chrome, movie_id: str):
     """
     Scrapes the 'wheelerrecommends' movie details page and returns the results as a MovieDetailsPage object.
 
     Args:
+        driver (webdriver): Chrome webdriver instance.
         movie_id (str): the unique identifier for the movie.
 
     Returns:
         MovieDetailsPage: a MovieDetailsPage object.
     """
-
-    # create driver
-    driver = webdriver.Chrome()
 
     # load and maximize website
     driver.get(f"https://wheelerrecommends.com/?title={movie_id}")
@@ -84,5 +82,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    data = scrape(args.movie_id)
+    data = scrape(webdriver.Chrome(), args.movie_id)
     print(json.dumps(data, default=lambda o: o.__dict__, indent=4, sort_keys=True))

@@ -9,10 +9,16 @@ plugins:
 provider:
   name: aws
   runtime: python3.9
+  ecr:
+    images:
+      appimage:
+        path: ./
 
 functions:
   api:
     handler: handler.main
+    image:
+      name: appimage
     timeout: 60
     events:
       - schedule: rate(24 hours)
