@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from app.classes.HomePage import HomePage
-from app.classes.Movie import Movie
+from classes.HomePage import HomePage
+from classes.Movie import Movie
 
 
 def click_view_more(driver: webdriver.Chrome):

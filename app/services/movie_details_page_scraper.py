@@ -5,9 +5,9 @@ import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-from app.classes.Movie import Movie
-from app.classes.MovieDetails import MovieDetails
-from app.classes.MovieDetailsPage import MovieDetailsPage
+from classes.Movie import Movie
+from classes.MovieDetails import MovieDetails
+from classes.MovieDetailsPage import MovieDetailsPage
 
 
 def scrape_movie_details(movie_id: str, soup: BeautifulSoup):

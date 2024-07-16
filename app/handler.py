@@ -1,8 +1,8 @@
 
 import json
 
-from app.services.home_page_scraper import scrape as scrape_home_page
-from app.services.movie_details_page_scraper import scrape as scrape_movie_details_page
+from services.home_page_scraper import scrape as scrape_home_page
+from services.movie_details_page_scraper import scrape as scrape_movie_details_page
 
 
 def main(event, context):
