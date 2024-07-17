@@ -1,5 +1,11 @@
 FROM amazon/aws-lambda-python:3.12
 
+RUN ls -lht
+
+COPY requirements.txt requirements.txt
+
+RUN ls -lht
+
 RUN pip install -r requirements.txt
 
 #RUN dnf install -y \
