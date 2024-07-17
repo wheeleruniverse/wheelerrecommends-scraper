@@ -10,6 +10,9 @@ RUN pip install -r requirements.txt
 
 # install chrome
 COPY chrome-installer.sh chrome-installer.sh
+RUN ls -lht
+RUN chmod +x chrome-installer.sh
+RUN ls -lht
 RUN ./chrome-installer.sh
 
 # copy application code
