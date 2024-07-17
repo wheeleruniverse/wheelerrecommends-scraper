@@ -1,0 +1,59 @@
+name: app
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - app/**
+
+  workflow_dispatch:
+
+env:
+  AWS_ACCOUNT_ID: 778263278211
+  AWS_REGION: us-east-1
+  AWS_ECR_REPOSITORY: wheelerrecommends-scraper
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Authenticate to AWS ECR
+        run: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} \
+          | docker login --username AWS --password-stdin "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
+
+      - name: Docker Build
+        run: |
+          docker build -t ${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
+
+      - name: Docker Tag
+        run: |
+          docker tag \
+            "${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}" \
+            "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
+
+      - name: Docker Push
+        run: |
+          docker push "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
+
+#      - name: Update AWS Lambda
+#        run: |
+#          aws lambda update-function-code \
+#            --function-name ${{ env.AWS_LAMBDA_FUNCTION }} \
+#            --image-uri "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}" \
+#            --region ${{ env.AWS_REGION }}

@@ -1,5 +1,7 @@
 FROM amazon/aws-lambda-python:3.12
 
+RUN pip install -r requirments.txt
+
 
 # pip install and chrome install!
 
