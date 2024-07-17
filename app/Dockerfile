@@ -1,12 +1,13 @@
 FROM amazon/aws-lambda-python:3.12
 
-# install python pip packages
+# install python dependencies
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-#RUN dnf install -y \
-#    alsa-lib at-spi2-atk atk cups-libs dbus-glib dbus-glib-devel gtk3 jq libXcomposite libXcursor libXdamage libXext \
-#    libXi libXrandr libXScrnSaver libXt libXtst mesa-libgbm nss pango unzip xorg-x11-server-Xvfb xorg-x11-xauth
+# install chrome dependencies
+RUN apt-get install -y \
+    alsa-lib at-spi2-atk atk cups-libs dbus-glib dbus-glib-devel gtk3 jq libXcomposite libXcursor libXdamage libXext \
+    libXi libXrandr libXScrnSaver libXt libXtst mesa-libgbm nss pango unzip xorg-x11-server-Xvfb xorg-x11-xauth
 
 # install chrome
 COPY chrome-installer.sh chrome-installer.sh
