@@ -1,9 +1,6 @@
 FROM amazon/aws-lambda-python:3.12
 
-RUN pip install -r requirments.txt
-
-
-# pip install and chrome install!
+RUN pip install -r requirements.txt
 
 #RUN dnf install -y \
 #    alsa-lib at-spi2-atk atk cups-libs dbus-glib dbus-glib-devel gtk3 jq libXcomposite libXcursor libXdamage libXext \
@@ -19,6 +16,8 @@ COPY classes/ classes
 
 COPY services/ services
 
-COPY handler.py .
+COPY handler.py handler.py
+
+RUN ls -lht
 
 CMD [ "handler.main" ]
