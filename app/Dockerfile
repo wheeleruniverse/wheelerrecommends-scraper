@@ -9,7 +9,7 @@ RUN pip install -r requirements.txt
 #    libXi libXrandr libXScrnSaver libXt libXtst mesa-libgbm nss pango unzip xorg-x11-server-Xvfb xorg-x11-xauth
 
 # install chrome
-COPY ./chrome-installer.sh ./chrome-installer.sh
+COPY chrome-installer.sh chrome-installer.sh
 RUN ./chrome-installer.sh
 
 # copy application code
