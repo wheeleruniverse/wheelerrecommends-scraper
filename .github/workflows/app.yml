@@ -20,7 +20,6 @@ jobs:
     defaults:
       run:
         working-directory: app
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -36,9 +35,11 @@ jobs:
         run: |
           aws ecr get-login-password --region ${{ env.AWS_REGION }} \
           | docker login --username AWS --password-stdin "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
+
       - name: Docker Build
         run: |
           docker build -t ${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
+
       - name: Docker Tag
         run: |
           docker tag \
@@ -48,6 +49,9 @@ jobs:
         run: |
           docker push "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
 
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Serverless Deploy
         uses: serverless/github-action@v3
         with:
