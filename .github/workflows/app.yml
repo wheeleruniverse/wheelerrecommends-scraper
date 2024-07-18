@@ -10,9 +10,10 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_ACCOUNT_ID: 778263278211
+  DOCKER_IMAGE_TAG: wheelerrecommends-scraper:${{ github.sha }}
+  AWS_ECR_DOMAIN: 778263278211.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+  AWS_ECR_IMAGE_URI: ${{ env.AWS_ECR_DOMAIN }}/${{ env.DOCKER_IMAGE_TAG }}
   AWS_REGION: us-east-1
-  AWS_ECR_REPOSITORY: wheelerrecommends-scraper
 
 jobs:
   build:
@@ -35,25 +36,25 @@ jobs:
       - name: Authenticate to AWS ECR
         run: |
           aws ecr get-login-password --region ${{ env.AWS_REGION }} \
-          | docker login --username AWS --password-stdin "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
+          | docker login --username AWS --password-stdin "${{ env.AWS_ECR_DOMAIN }}"
 
       - name: Docker Build
         run: |
-          docker build -t ${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
+          docker build -t ${{ env.DOCKER_IMAGE_TAG }} .
 
       - name: Docker Tag
         run: |
-          docker tag \
-            "${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}" \
-            "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
+          docker tag "${{ env.DOCKER_IMAGE_TAG }}" "${{ env.AWS_ECR_IMAGE_URI }}"
 
       - name: Docker Push
         run: |
-          docker push "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
+          docker push "${{ env.AWS_ECR_IMAGE_URI }}"
 
-#      - name: Update AWS Lambda
-#        run: |
-#          aws lambda update-function-code \
-#            --function-name ${{ env.AWS_LAMBDA_FUNCTION }} \
-#            --image-uri "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}" \
-#            --region ${{ env.AWS_REGION }}
+      - name: Serverless Deploy
+        uses: serverless/github-action@v3
+        with:
+          args: -c "cd app && serverless deploy --param=\"ecr-image-uri=${{ env.AWS_ECR_IMAGE_URI }}\""
+          entrypoint: /bin/sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}

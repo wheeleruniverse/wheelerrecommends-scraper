@@ -9,10 +9,11 @@ provider:
 
 functions:
   api:
+    description: 'serverless web scraper'
     events:
-      - schedule: rate(24 hours)
+      - schedule: rate(6 hours)
     image:
-      uri: 778263278211.dkr.ecr.us-east-1.amazonaws.com/wheelerrecommends-scraper:74993d6e18a6ac6ae192c6ce4cdf9459c5f88e52
+      uri: ${param:ecr-image-uri}
     timeout: 300
 
 package:
