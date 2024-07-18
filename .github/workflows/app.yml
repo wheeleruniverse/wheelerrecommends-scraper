@@ -10,6 +10,8 @@ on:
   workflow_dispatch:
 
 env:
+  AWS_ACCOUNT_ID: 778263278211
+  AWS_ECR_REPOSITORY: wheelerrecommends-scraper
   AWS_REGION: us-east-1
 
 jobs:
@@ -20,12 +22,6 @@ jobs:
         working-directory: app
 
     steps:
-      - name: Create Composite Environment Variables
-        run: |
-          echo "DOCKER_IMAGE_TAG=wheelerrecommends-scraper:${{ github.sha }}" >> $GITHUB_ENV
-          echo "AWS_ECR_DOMAIN=778263278211.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com" >> $GITHUB_ENV
-          echo "AWS_ECR_IMAGE_URI=${{ env.AWS_ECR_DOMAIN }}/${{ env.DOCKER_IMAGE_TAG }}" >> $GITHUB_ENV
-
       - name: Checkout Repository
         uses: actions/checkout@v2
 
@@ -39,24 +35,24 @@ jobs:
       - name: Authenticate to AWS ECR
         run: |
           aws ecr get-login-password --region ${{ env.AWS_REGION }} \
-          | docker login --username AWS --password-stdin "${{ env.AWS_ECR_DOMAIN }}"
-
+          | docker login --username AWS --password-stdin "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
       - name: Docker Build
         run: |
-          docker build -t ${{ env.DOCKER_IMAGE_TAG }} .
-
+          docker build -t ${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
       - name: Docker Tag
         run: |
-          docker tag "${{ env.DOCKER_IMAGE_TAG }}" "${{ env.AWS_ECR_IMAGE_URI }}"
-
+          docker tag \
+            "${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}" \
+            "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
       - name: Docker Push
         run: |
-          docker push "${{ env.AWS_ECR_IMAGE_URI }}"
+          docker push "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
 
       - name: Serverless Deploy
         uses: serverless/github-action@v3
         with:
-          args: -c "cd app && serverless deploy --param=\"ecr-image-uri=${{ env.AWS_ECR_IMAGE_URI }}\""
+          args: -c "cd app && serverless deploy \
+            --param=\"ecr-image-uri=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}\""
           entrypoint: /bin/sh
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
