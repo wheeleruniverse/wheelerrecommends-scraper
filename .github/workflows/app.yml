@@ -51,8 +51,7 @@ jobs:
       - name: Serverless Deploy
         uses: serverless/github-action@v3
         with:
-          args: -c "cd app && serverless deploy \
-            --param ecr-image-uri=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
+          args: -c "cd app && serverless deploy --param sha=${{ github.sha }}"
           entrypoint: /bin/sh
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}

@@ -13,10 +13,9 @@ functions:
     events:
       - schedule: rate(6 hours)
     image:
-      uri: ${param:ecr-image-uri}
+      uri: ${aws:accountId}.dkr.ecr.${aws:region}.amazonaws.com/wheelerrecommends-scraper:${param:sha}
     timeout: 300
 
 package:
   exclude:
-    - node_modules/**
     - venv/**
