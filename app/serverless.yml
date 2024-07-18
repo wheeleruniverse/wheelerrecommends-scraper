@@ -3,13 +3,6 @@ service: wheelerrecommends-scraper
 
 frameworkVersion: '3'
 
-#plugins:
-#  - serverless-python-requirements
-#
-#custom:
-#  pythonRequirements:
-#    slim: true
-
 provider:
   name: aws
   runtime: python3.9
@@ -18,13 +11,9 @@ functions:
   api:
     events:
       - schedule: rate(24 hours)
-#    handler: handler.main
     image:
-      uri: 778263278211.dkr.ecr.us-east-1.amazonaws.com/wheelerrecommends-scraper:ce5ec54c0a08c866b35a46ff522c6a9798088282f69fcca16a4dfbbd6800c1de
-#    layers:
-#      - ${cf:selenium-layer-dev.ChromedriverLambdaLayerExport}
-#      - ${cf:selenium-layer-dev.SeleniumLambdaLayerExport}
-    timeout: 60
+      uri: 778263278211.dkr.ecr.us-east-1.amazonaws.com/wheelerrecommends-scraper:74993d6e18a6ac6ae192c6ce4cdf9459c5f88e52
+    timeout: 300
 
 package:
   exclude:
