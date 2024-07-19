@@ -7,7 +7,7 @@ from selenium import webdriver
 from classes.MovieDetails import MovieDetails
 from classes.MovieDetailsPage import MovieDetailsPage
 from services.generic_page_scraper import scrape_recommendations
-from utilities.csv_utility import write_movie_details_page
+from utilities.csv_utility import write
 from utilities.json_utility import to_json
 
 
@@ -74,4 +74,4 @@ if __name__ == '__main__':
 
     print(to_json(data))
 
-    write_movie_details_page(data)
+    write(data)
