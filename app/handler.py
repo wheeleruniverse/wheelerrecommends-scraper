@@ -1,5 +1,7 @@
 
 import utilities.csv_utility as csv_utility
+import utilities.json_utility as json_utility
+import utilities.s3_utility as s3_utility
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -8,11 +10,10 @@ from tempfile import mkdtemp
 
 from services.home_page_scraper import scrape as scrape_home_page
 from services.movie_details_page_scraper import scrape as scrape_movie_details_page
-from utilities.json_utility import to_json
 
 
 def main(event, context):
-    print(f"wheelerrecommends-scraper: event: {event}, context: {context}")
+    print(f"scraper-2CCA5B80s2CD7s4253sBCA: wheelerrecommends-scraper: event: {event}, context: {context}")
 
     driver = __initialize_headless_driver()
 
@@ -23,20 +24,23 @@ def main(event, context):
     view_more_clicks = event['view_more_clicks'] if 'view_more_clicks' in event else 1
 
     if page == 'home':
-        print(f"scrape_home_page --view_more_clicks '{view_more_clicks}'")
+        print(f"scraper-92883838sE774s4FD8sA74: scrape_home_page --view_more_clicks '{view_more_clicks}'")
         data = scrape_home_page(driver, view_more_clicks)
 
     elif page == 'movie_details':
-        print(f"scrape_movie_details_page {movie_id}")
+        print(f"scraper-82F12259s3647s4B2Cs859: scrape_movie_details_page {movie_id}")
         data = scrape_movie_details_page(driver, movie_id)
 
     else:
-        print(f"page '{page}' is invalid")
+        print(f"scraper-133A8265sE4D7s43F1sB20: page '{page}' is invalid")
         data = {}
 
-    print(to_json(data))
+    print(f"scraper-56256417s6344s4FA9s99F: json_utility.to_json\n{json_utility.to_json(data)}")
 
-    print(csv_utility.write(data))
+    path = csv_utility.write(data)
+    print(f"scraper-F4D64583s12FAs4537s929: csv_utility.write\n{path}")
+
+    s3_utility.upload(path)
 
 
 def __initialize_headless_driver() -> webdriver.Chrome:

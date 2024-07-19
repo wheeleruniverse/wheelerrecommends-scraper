@@ -16,7 +16,7 @@ def write(page_obj: any) -> str:
         page_obj (HomePage | MovieDetailsPage): The page object to create filename for.
 
     Returns:
-        file_path (str): The absolute path to the recently created csv file.
+        str: The absolute path to the recently created csv file.
     """
 
     if isinstance(page_obj, HomePage):
@@ -67,7 +67,7 @@ def __create_tmp_dir(datetime_obj: datetime.datetime) -> str:
         the temporary directory.
 
     Returns:
-        tmp_dir_path (str): The path to a temporary directory that was either created, or re-created,
+        str: The path to a temporary directory that was either created, or re-created,
         with subdirectories for the provided year/month/day of the datetime object provided.
     """
 
@@ -92,7 +92,7 @@ def __write_home_page(home_page: HomePage) -> str:
         home_page (HomePage): The HomePage object to write.
 
     Returns:
-        file_path (str): The absolute path to the recently created csv file.
+        str: The absolute path to the recently created csv file.
     """
 
     file_path = __create_file_path(home_page)
@@ -137,7 +137,7 @@ def __write_movie_details_page(movie_details_page: MovieDetailsPage) -> str:
         movie_details_page (MovieDetailsPage): The MovieDetailsPage object to write.
 
     Returns:
-        file_path (str): The absolute path to the recently created csv file.
+        str: The absolute path to the recently created csv file.
     """
 
     file_path = __create_file_path(movie_details_page)

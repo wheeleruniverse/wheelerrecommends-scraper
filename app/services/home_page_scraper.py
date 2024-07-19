@@ -16,7 +16,7 @@ def click_view_more(driver: webdriver.Chrome) -> None:
     Finds the 'View More' button on the page and clicks it to load more movies.
 
     Args:
-        driver (webdriver): Webdriver instance.
+        webdriver.Chrome: Webdriver instance.
     """
 
     view_more_button = driver.find_element(By.CSS_SELECTOR, '.content-container .more-container button')

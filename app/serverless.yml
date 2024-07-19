@@ -6,6 +6,12 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: python3.9
+  iamRoleStatements:
+    - Action:
+        - 's3:GetObject'
+        - 's3:PutObject'
+      Effect: Allow
+      Resource: 'arn:aws:s3:::wheelerrecommends-scraper-data/*'
 
 functions:
   api:
