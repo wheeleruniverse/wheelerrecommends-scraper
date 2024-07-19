@@ -1,7 +1,9 @@
+
+[![app](https://github.com/wheeleruniverse/wheelerrecommends-scraper/actions/workflows/app.yml/badge.svg)](https://github.com/wheeleruniverse/wheelerrecommends-scraper/actions/workflows/app.yml)
+
 ## Wheeler Recommends Scraper
 
 Serverless web scraper that uses Python, Beautiful Soup, and Selenium!
-
 
 ### Resources
 
