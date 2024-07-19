@@ -71,7 +71,7 @@ def __create_tmp_dir(datetime_obj: datetime.datetime) -> str:
         with subdirectories for the provided year/month/day of the datetime object provided.
     """
 
-    root_dir = "tmp/scraper"
+    root_dir = "/tmp/scraper"
     if os.path.exists(root_dir):
         shutil.rmtree(root_dir)
 
