@@ -45,6 +45,7 @@ jobs:
           docker tag \
             "${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}" \
             "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
+
       - name: Docker Push
         run: |
           docker push "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
