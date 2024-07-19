@@ -1,4 +1,5 @@
-import json
+
+from utilities.json_utility import to_json
 
 
 class MovieDetails:
@@ -8,13 +9,13 @@ class MovieDetails:
 
     def __init__(
             self,
-            movie_id=None,
-            movie_name=None,
-            movie_genres=None,
-            movie_rating=None,
-            movie_votes=None,
-            movie_link_imdb=None,
-            movie_link_google=None,
+            movie_id: str,
+            movie_name: str,
+            movie_genres: str,
+            movie_rating: int,
+            movie_votes: int,
+            movie_link_imdb: str,
+            movie_link_google: str,
     ):
         """
         Creates a MovieDetails object.
@@ -41,4 +42,4 @@ class MovieDetails:
         self.movie_link_google = movie_link_google
 
     def __str__(self):
-        return json.dumps(self, default=lambda o: o.__dict__, indent=4, sort_keys=True)
+        return to_json(self)

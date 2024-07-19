@@ -19,6 +19,7 @@ RUN ./chrome-installer.sh
 # copy application code
 COPY classes/ classes
 COPY services/ services
+COPY utilities/ utilities
 COPY handler.py handler.py
 
 # define the handler

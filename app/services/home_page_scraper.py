@@ -1,16 +1,17 @@
+
 import argparse
-import json
 import time
 
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 from classes.HomePage import HomePage
-from classes.Movie import Movie
+from services.generic_page_scraper import scrape_recommendations
+from utilities.csv_utility import write_home_page
+from utilities.json_utility import to_json
 
 
-def click_view_more(driver: webdriver.Chrome):
+def click_view_more(driver: webdriver.Chrome) -> None:
     """
     Finds the 'View More' button on the page and clicks it to load more movies.
 
@@ -22,7 +23,7 @@ def click_view_more(driver: webdriver.Chrome):
     view_more_button.click()
 
 
-def scrape(driver: webdriver.Chrome, view_more_clicks: int):
+def scrape(driver: webdriver.Chrome, view_more_clicks: int) -> HomePage:
     """
     Scrapes the 'wheelerrecommends' home page and returns the results as a HomePage object.
 
@@ -34,36 +35,18 @@ def scrape(driver: webdriver.Chrome, view_more_clicks: int):
         HomePage: a HomePage object.
     """
 
-    # load and maximize website
     driver.get('https://wheelerrecommends.com/')
     driver.maximize_window()
 
-    # wait because website is dynamically loaded
     time.sleep(5)
 
     for _ in range(view_more_clicks):
         time.sleep(1)
         click_view_more(driver)
 
-    # scrape the website
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-    posters = soup.select('.content-container .movies-container:not(.hidden) .poster')
-
-    movies = []
-    for idx, poster in enumerate(posters):
-        movies.append(
-            Movie(
-                movie_id=poster['id'],
-                movie_idx=idx,
-                movie_name=poster.select_one('.movie-name').get_text(),
-                movie_poster=poster.select_one('img')['src'],
-                details_link=poster.select_one('a')['href'],
-            ))
-
     return HomePage(
         page_url=driver.current_url,
-        recommendations=movies,
+        recommendations=scrape_recommendations(driver.page_source),
         view_more_clicks=view_more_clicks
     )
 
@@ -81,4 +64,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     data = scrape(webdriver.Chrome(), args.view_more_clicks)
-    print(json.dumps(data, default=lambda o: o.__dict__, indent=4, sort_keys=True))
+
+    print(to_json(data))
+
+    write_home_page(data)

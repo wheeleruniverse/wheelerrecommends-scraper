@@ -1,4 +1,5 @@
-import json
+
+import utilities.csv_utility as csv_utility
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -7,9 +8,38 @@ from tempfile import mkdtemp
 
 from services.home_page_scraper import scrape as scrape_home_page
 from services.movie_details_page_scraper import scrape as scrape_movie_details_page
+from utilities.json_utility import to_json
 
 
-def initialize_headless_driver():
+def main(event, context):
+    print(f"wheelerrecommends-scraper: event: {event}, context: {context}")
+
+    driver = __initialize_headless_driver()
+
+    movie_id = event['movie_id'] if 'movie_id' in event else 'tt1431045'
+
+    page = event['page'] if 'page' in event else 'home'
+
+    view_more_clicks = event['view_more_clicks'] if 'view_more_clicks' in event else 1
+
+    if page == 'home':
+        print(f"scrape_home_page --view_more_clicks '{view_more_clicks}'")
+        data = scrape_home_page(driver, view_more_clicks)
+
+    elif page == 'movie_details':
+        print(f"scrape_movie_details_page {movie_id}")
+        data = scrape_movie_details_page(driver, movie_id)
+
+    else:
+        print(f"page '{page}' is invalid")
+        data = {}
+
+    print(to_json(data))
+
+    print(csv_utility.write(data))
+
+
+def __initialize_headless_driver() -> webdriver.Chrome:
     """
     Creates a headless Chrome webdriver instance.
 
@@ -38,33 +68,7 @@ def initialize_headless_driver():
         service_log_path="/tmp/chromedriver.log"
     )
 
-    driver = webdriver.Chrome(
+    return webdriver.Chrome(
         service=service,
         options=options
     )
-    
-    return driver
-
-
-def main(event, context):
-    driver = initialize_headless_driver()
-
-    movie_id = event['movie_id'] if 'movie_id' in event else 'tt1431045'
-
-    page = event['page'] if 'page' in event else 'home'
-
-    view_more_clicks = event['view_more_clicks'] if 'view_more_clicks' in event else 1
-
-    if page == 'home':
-        print(f"scrape_home_page --view_more_clicks '{view_more_clicks}'")
-        data = scrape_home_page(driver, view_more_clicks)
-
-    elif page == 'movie_details':
-        print(f"scrape_movie_details_page {movie_id}")
-        data = scrape_movie_details_page(driver, movie_id)
-
-    else:
-        print(f"page '{page}' is invalid")
-        data = {}
-
-    print(json.dumps(data, default=lambda o: o.__dict__, indent=4, sort_keys=True))

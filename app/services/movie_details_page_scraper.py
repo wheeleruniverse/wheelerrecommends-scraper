@@ -1,28 +1,32 @@
 import argparse
-import json
 import time
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-from classes.Movie import Movie
 from classes.MovieDetails import MovieDetails
 from classes.MovieDetailsPage import MovieDetailsPage
+from services.generic_page_scraper import scrape_recommendations
+from utilities.csv_utility import write_movie_details_page
+from utilities.json_utility import to_json
 
 
-def scrape_movie_details(movie_id: str, soup: BeautifulSoup):
+def scrape_movie_details(movie_id: str, page_source: str) -> MovieDetails:
     """
     Scrapes the 'details-container' class for specific details not rendered anywhere else.
 
     Args:
         movie_id (str): the unique identifier for the movie.
-        soup (BeautifulSoup): BeautifulSoup object.
+        page_source (str): A string or a file-like object representing markup to be parsed.
 
     Returns:
         MovieDetails: a MovieDetails object.
     """
 
+    soup = BeautifulSoup(page_source, 'html.parser')
+
     details_container = soup.select_one('.content-container .details-container')
+
     return MovieDetails(
         movie_id=movie_id,
         movie_name=details_container.select_one('.name-container .label').get_text().strip(),
@@ -34,7 +38,7 @@ def scrape_movie_details(movie_id: str, soup: BeautifulSoup):
     )
 
 
-def scrape(driver: webdriver.Chrome, movie_id: str):
+def scrape(driver: webdriver.Chrome, movie_id: str) -> MovieDetailsPage:
     """
     Scrapes the 'wheelerrecommends' movie details page and returns the results as a MovieDetailsPage object.
 
@@ -46,33 +50,17 @@ def scrape(driver: webdriver.Chrome, movie_id: str):
         MovieDetailsPage: a MovieDetailsPage object.
     """
 
-    # load and maximize website
     driver.get(f"https://wheelerrecommends.com/?title={movie_id}")
     driver.maximize_window()
 
-    # wait because website is dynamically loaded
     time.sleep(3)
 
-    # scrape the website
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-    posters = soup.select('.content-container .movies-container:not(.hidden) .poster')
-
-    movies = []
-    for idx, poster in enumerate(posters):
-        movies.append(
-            Movie(
-                movie_id=poster['id'],
-                movie_idx=idx,
-                movie_name=poster.select_one('.movie-name').get_text(),
-                movie_poster=poster.select_one('img')['src'],
-                details_link=poster.select_one('a')['href'],
-            ))
+    page_source = driver.page_source
 
     return MovieDetailsPage(
         page_url=driver.current_url,
-        details=scrape_movie_details(movie_id, soup),
-        recommendations=movies
+        details=scrape_movie_details(movie_id, page_source),
+        recommendations=scrape_recommendations(page_source),
     )
 
 
@@ -83,4 +71,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     data = scrape(webdriver.Chrome(), args.movie_id)
-    print(json.dumps(data, default=lambda o: o.__dict__, indent=4, sort_keys=True))
+
+    print(to_json(data))
+
+    write_movie_details_page(data)
