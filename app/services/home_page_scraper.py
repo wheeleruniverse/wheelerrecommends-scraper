@@ -67,4 +67,4 @@ if __name__ == '__main__':
 
     print(to_json(data))
 
-    write(data)
+    print(write(data))
