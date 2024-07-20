@@ -8,6 +8,7 @@ from classes.MovieDetails import MovieDetails
 from classes.MovieDetailsPage import MovieDetailsPage
 from services.generic_page_scraper import scrape_recommendations
 from utilities.csv_utility import write
+from utilities.data_utility import get_random_movie_id
 from utilities.json_utility import to_json
 
 
@@ -26,6 +27,9 @@ def scrape_movie_details(movie_id: str, page_source: str) -> MovieDetails:
     soup = BeautifulSoup(page_source, 'html.parser')
 
     details_container = soup.select_one('.content-container .details-container')
+
+    if details_container is None:
+        raise Exception(f"scraper-12A12359s4647s4B3Cs359: no details")
 
     return MovieDetails(
         movie_id=movie_id,
@@ -50,6 +54,10 @@ def scrape(driver: webdriver.Chrome, movie_id: str) -> MovieDetailsPage:
         MovieDetailsPage: a MovieDetailsPage object.
     """
 
+    if movie_id == 'random':
+        movie_id = get_random_movie_id()
+        print(f"scraper-82F12259s3647s4B2Cs859: get_random_movie_id: {movie_id}")
+
     driver.get(f"https://wheelerrecommends.com/?title={movie_id}")
     driver.maximize_window()
 
@@ -66,7 +74,10 @@ def scrape(driver: webdriver.Chrome, movie_id: str) -> MovieDetailsPage:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('movie-details-page-scraper')
-    parser.add_argument('movie_id', help='any "movie_id" to build the "details_link" programmatically')
+    parser.add_argument(
+        'movie_id',
+        help='any "movie_id", or the string literal "random", to build the "details_link" programmatically'
+    )
 
     args = parser.parse_args()
 

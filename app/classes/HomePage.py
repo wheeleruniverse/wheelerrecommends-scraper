@@ -35,5 +35,9 @@ class HomePage:
         self.recommendations = recommendations
         self.view_more_clicks = view_more_clicks
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Returns:
+            str: a JSON string representation of the HomePage object.
+        """
         return to_json(self)

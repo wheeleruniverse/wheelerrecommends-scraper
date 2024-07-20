@@ -36,5 +36,9 @@ class MovieDetailsPage:
         self.details = details
         self.recommendations = recommendations
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Returns:
+            str: a JSON string representation of the MovieDetailsPage object.
+        """
         return to_json(self)

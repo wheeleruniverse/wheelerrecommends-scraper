@@ -17,7 +17,15 @@ functions:
   api:
     description: 'serverless web scraper'
     events:
-      - schedule: rate(6 hours)
+     - schedule: cron(0 15 * * * *)
+       input:
+         page: home
+         view_more_clicks: 9
+     - schedule: cron(0 45 * * * *)
+       input:
+         page: movie_details
+         movie_id: random
+
     image:
       uri: ${aws:accountId}.dkr.ecr.${aws:region}.amazonaws.com/wheelerrecommends-scraper:${param:sha}
     timeout: 300

@@ -1,4 +1,3 @@
-
 from utilities.json_utility import to_json
 
 
@@ -41,5 +40,9 @@ class MovieDetails:
         self.movie_link_imdb = movie_link_imdb
         self.movie_link_google = movie_link_google
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Returns:
+            str: a JSON string representation of the MovieDetails object.
+        """
         return to_json(self)

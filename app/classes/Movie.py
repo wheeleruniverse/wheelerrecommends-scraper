@@ -38,5 +38,9 @@ class Movie:
         self.movie_name = movie_name
         self.movie_poster = movie_poster
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Returns:
+            str: a JSON string representation of the Movie object.
+        """
         return to_json(self)
