@@ -1,6 +1,5 @@
 
 import utilities.csv_utility as csv_utility
-import utilities.json_utility as json_utility
 import utilities.s3_utility as s3_utility
 
 from selenium import webdriver
@@ -34,8 +33,6 @@ def main(event, context):
     else:
         print(f"scraper-133A8265sE4D7s43F1sB20: page '{page}' is invalid")
         data = {}
-
-    print(f"scraper-56256417s6344s4FA9s99F: json_utility.to_json\n{json_utility.to_json(data)}")
 
     path = csv_utility.write(data)
     print(f"scraper-F4D64583s12FAs4537s929: csv_utility.write\n{path}")
