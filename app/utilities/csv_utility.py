@@ -42,29 +42,30 @@ def __create_file_path(page_obj: any) -> str:
 
     if isinstance(page_obj, HomePage):
         datetime_obj = page_obj.datetime
-        file_suffix = "home_page"
+        page_name = "home_page"
 
     elif isinstance(page_obj, MovieDetailsPage):
         datetime_obj = page_obj.datetime
-        file_suffix = "movie_details_page"
+        page_name = "movie_details_page"
 
     else:
         raise TypeError("page_obj must be HomePage or MovieDetailsPage")
 
-    tmp_dir_path = __create_tmp_dir(datetime_obj)
+    tmp_dir_path = __create_tmp_dir(datetime_obj, page_name)
 
     time_str = datetime_obj.strftime("%H%M%S")
 
-    return f"{tmp_dir_path}/{time_str}_{file_suffix}.csv"
+    return f"{tmp_dir_path}/{time_str}.csv"
 
 
-def __create_tmp_dir(datetime_obj: datetime.datetime) -> str:
+def __create_tmp_dir(datetime_obj: datetime.datetime, page_name: str) -> str:
     """
     Creates a temporary directory. If the directory already exists it will be recursively deleted beforehand.
 
     Args:
         datetime_obj (datetime.datetime): The datetime object that will be used to create subdirectories within
         the temporary directory.
+        page_name (str): The name of the page.
 
     Returns:
         str: The path to a temporary directory that was either created, or re-created,
@@ -77,7 +78,7 @@ def __create_tmp_dir(datetime_obj: datetime.datetime) -> str:
 
     date_str = datetime_obj.strftime("%Y/%m/%d")
 
-    tmp_dir_path = f"{root_dir}/{date_str}"
+    tmp_dir_path = f"{root_dir}/{page_name}/{date_str}"
 
     os.makedirs(tmp_dir_path)
 
@@ -97,7 +98,7 @@ def __write_home_page(home_page: HomePage) -> str:
 
     file_path = __create_file_path(home_page)
 
-    with open(file_path, 'w') as f:
+    with open(file_path, 'w', encoding='utf-8') as f:
         csv_writer = csv.writer(f, delimiter=',', lineterminator='\n', quoting=csv.QUOTE_ALL)
         csv_writer.writerow([
             'id',
@@ -142,7 +143,7 @@ def __write_movie_details_page(movie_details_page: MovieDetailsPage) -> str:
 
     file_path = __create_file_path(movie_details_page)
 
-    with open(file_path, 'w') as f:
+    with open(file_path, 'w', encoding='utf-8') as f:
         csv_writer = csv.writer(f, delimiter=',', lineterminator='\n', quoting=csv.QUOTE_ALL)
         csv_writer.writerow([
             'id',
