@@ -55,7 +55,7 @@ def __create_file_path(page_obj: any) -> str:
 
     time_str = datetime_obj.strftime("%H%M%S")
 
-    return f"{tmp_dir_path}/{time_str}.csv"
+    return f"{tmp_dir_path}/{time_str}.tsv"
 
 
 def __create_tmp_dir(datetime_obj: datetime.datetime, page_name: str) -> str:
@@ -76,7 +76,7 @@ def __create_tmp_dir(datetime_obj: datetime.datetime, page_name: str) -> str:
     if os.path.exists(root_dir):
         shutil.rmtree(root_dir)
 
-    date_str = datetime_obj.strftime("%Y/%m/%d")
+    date_str = datetime_obj.strftime("year=%Y/month=%m/day=%d")
 
     tmp_dir_path = f"{root_dir}/{page_name}/{date_str}"
 
@@ -99,7 +99,7 @@ def __write_home_page(home_page: HomePage) -> str:
     file_path = __create_file_path(home_page)
 
     with open(file_path, 'w', encoding='utf-8') as f:
-        csv_writer = csv.writer(f, delimiter=',', lineterminator='\n', quoting=csv.QUOTE_ALL)
+        csv_writer = csv.writer(f, delimiter='\t', lineterminator='\n', quoting=csv.QUOTE_NONE)
         csv_writer.writerow([
             'id',
             'page_timestamp',
@@ -144,7 +144,7 @@ def __write_movie_details_page(movie_details_page: MovieDetailsPage) -> str:
     file_path = __create_file_path(movie_details_page)
 
     with open(file_path, 'w', encoding='utf-8') as f:
-        csv_writer = csv.writer(f, delimiter=',', lineterminator='\n', quoting=csv.QUOTE_ALL)
+        csv_writer = csv.writer(f, delimiter='\t', lineterminator='\n', quoting=csv.QUOTE_NONE)
         csv_writer.writerow([
             'id',
             'page_timestamp',
