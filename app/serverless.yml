@@ -1,21 +1,8 @@
 
-service: wheelerrecommends-scraper
-
 frameworkVersion: '3'
-
-provider:
-  name: aws
-  runtime: python3.9
-  iamRoleStatements:
-    - Action:
-        - 's3:GetObject'
-        - 's3:PutObject'
-      Effect: Allow
-      Resource: 'arn:aws:s3:::wheelerrecommends-scraper-data/*'
 
 functions:
   api:
-    description: 'serverless web scraper'
     events:
      - schedule:
          rate: cron(15 * * * ? *) # minutes, hours, day-of-month, month, day-of-week, year
@@ -23,14 +10,13 @@ functions:
          input:
            page: home
            view_more_clicks: 9
-
      - schedule:
          rate: cron(45 * * * ? *)
          enabled: true
          input:
            page: movie_details
            movie_id: random
-
+    description: 'serverless web scraper'
     image:
       uri: ${aws:accountId}.dkr.ecr.${aws:region}.amazonaws.com/wheelerrecommends-scraper:${param:sha}
     timeout: 300
@@ -38,3 +24,15 @@ functions:
 package:
   exclude:
     - venv/**
+
+provider:
+  iamRoleStatements:
+    - Action:
+        - 's3:GetObject'
+        - 's3:PutObject'
+      Effect: Allow
+      Resource: 'arn:aws:s3:::wheelerrecommends-scraper-data/*'
+  name: aws
+  runtime: python3.9
+
+service: wheelerrecommends-scraper

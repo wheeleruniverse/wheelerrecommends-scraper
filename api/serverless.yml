@@ -1,0 +1,19 @@
+
+frameworkVersion: '3'
+
+functions:
+  api:
+    events:
+      - httpApi: 'GET /'
+    handler: handler.main
+    runtime: python3.9
+    timeout: 10
+
+package:
+  exclude:
+    - venv/**
+
+provider:
+  name: aws
+
+service: wheelerrecommends-scraper-analytics
