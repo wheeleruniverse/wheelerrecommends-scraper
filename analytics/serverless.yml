@@ -1,0 +1,19 @@
+
+frameworkVersion: '3'
+
+functions:
+  api:
+    events:
+      - httpApi: 'GET /'
+    image:
+      uri: ${aws:accountId}.dkr.ecr.${aws:region}.amazonaws.com/wheelerrecommends-scraper-analytics:${param:sha}
+    timeout: 10
+
+package:
+  exclude:
+    - venv/**
+
+provider:
+  name: aws
+
+service: wheelerrecommends-scraper-analytics

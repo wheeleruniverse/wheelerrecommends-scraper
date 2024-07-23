@@ -1,0 +1,67 @@
+name: analytics
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - analytics/**
+
+  workflow_dispatch:
+
+env:
+  AWS_ACCOUNT_ID: 778263278211
+  AWS_ECR_REPOSITORY: wheelerrecommends-scraper-analytics
+  AWS_REGION: us-east-1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: analytics
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Authenticate to AWS ECR
+        run: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} \
+          | docker login --username AWS --password-stdin "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
+
+      - name: Docker Build
+        run: |
+          docker build -t ${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
+
+      - name: Docker Tag
+        run: |
+          docker tag \
+            "${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}" \
+            "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
+
+      - name: Docker Push
+        run: |
+          docker push "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Serverless Deploy
+        uses: serverless/github-action@v3
+        with:
+          args: -c "cd app && serverless deploy --param sha=${{ github.sha }}"
+          entrypoint: /bin/sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}

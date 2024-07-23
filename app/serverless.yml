@@ -33,6 +33,5 @@ provider:
       Effect: Allow
       Resource: 'arn:aws:s3:::wheelerrecommends-scraper-data/*'
   name: aws
-  runtime: python3.9
 
 service: wheelerrecommends-scraper
