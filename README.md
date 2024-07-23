@@ -1,5 +1,6 @@
 
 [![app](https://github.com/wheeleruniverse/wheelerrecommends-scraper/actions/workflows/app.yml/badge.svg)](https://github.com/wheeleruniverse/wheelerrecommends-scraper/actions/workflows/app.yml)
+[![analytics](https://github.com/wheeleruniverse/wheelerrecommends-scraper/actions/workflows/analytics.yml/badge.svg)](https://github.com/wheeleruniverse/wheelerrecommends-scraper/actions/workflows/analytics.yml)
 
 ## Wheeler Recommends Scraper
 
