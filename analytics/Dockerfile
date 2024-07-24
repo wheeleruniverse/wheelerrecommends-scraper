@@ -8,6 +8,7 @@ RUN pip install -r requirements.txt
 RUN dnf install -y tar wget
 
 RUN wget -q https://ftp.gnu.org/gnu/glibc/glibc-2.40.tar.gz
+RUN ls -lht
 RUN tar -xvzf glibc-2.40.tar.gz
 
 RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz
