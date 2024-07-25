@@ -2,7 +2,14 @@
 import json
 import pyodbc
 
-connection_string = 'DRIVER={Amazon Athena ODBC (x64)};'
+connection_string = (
+    'AuthenticationType=Default Credentials;'
+    'AwsRegion=us-east-1;'
+    'Catalog=AwsDataCatalog;'
+    'DRIVER={Amazon Athena ODBC (x64)};'
+    'S3OutputLocation=s3://wheelerrecommends-scraper-logs/;'
+    'Schema=wheelerrecommends-scraper-database;'
+)
 
 
 def main(event, context):
