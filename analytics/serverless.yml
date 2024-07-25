@@ -7,6 +7,7 @@ functions:
       - httpApi: 'GET /'
     image:
       uri: ${aws:accountId}.dkr.ecr.${aws:region}.amazonaws.com/wheelerrecommends-scraper-analytics:${param:sha}
+    memorySize: 10240 # TODO: scale this down! TESTING ONLY
     timeout: 60
 
 package:
