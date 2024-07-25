@@ -23,7 +23,7 @@ RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz \
 
 # install AmazonAthenaODBC
 RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Linux/AmazonAthenaODBC-2.0.3.0.rpm
-RUN yes | rpm -Uvh ./AmazonAthenaODBC-2.0.3.0.rpm
+RUN yes | rpm -Uvh --nodeps ./AmazonAthenaODBC-2.0.3.0.rpm
 RUN ls -lht /opt/athena/odbc/ini/
 
 # install python dependencies
