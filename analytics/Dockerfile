@@ -11,6 +11,7 @@ FROM amazon/aws-lambda-python:3.12
 #RUN ls -lht
 #RUN tar -xvzf glibc-2.40.tar.gz
 
+RUN dnf install -y tar wget
 RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz
 RUN tar -xzf ./unixODBC-2.3.12.tar.gz
 RUN cd unixODBC-2.3.12 && ./configure \
