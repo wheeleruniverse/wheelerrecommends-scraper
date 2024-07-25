@@ -4,24 +4,31 @@ FROM amazon/aws-lambda-python:3.12
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-# install AWS Athena ODBC driver
-RUN dnf install -y \
-    gzip libXcomposite libXcursor libXdamage libXext libXi libXrandr libXScrnSaver libXt libXtst tar wget
+# install AWS Athena ODBC driver (Windows w/ Wine)
+RUN dnf config-manager --add-repo https://dl.winehq.org/wine-builds/fedora/40/winehq.repo
+RUN dnf install -y wget winehq-stable
 
-RUN wget -q https://rpmfind.net/linux/openmandriva/5.0/repository/aarch64/main/release/lib64unixODBC2-2.3.12-1-omv2390.aarch64.rpm
-RUN yes | rpm -Uvh ./lib64unixODBC2-2.3.12-1-omv2390.aarch64.rpm
+RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Windows/AmazonAthenaODBC-2.0.3.0.msi
+RUN wine msiexec /i ./AmazonAthenaODBC-2.0.3.0.msi
 
-RUN wget -q https://ftp.gnu.org/gnu/glibc/glibc-2.40.tar.gz
-RUN ls -lht
-RUN tar -xvzf glibc-2.40.tar.gz
-
-RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz
-RUN tar -xvzf unixODBC-2.3.12.tar.gz
-
-RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Linux/AmazonAthenaODBC-2.0.3.0.rpm
-RUN yes | rpm -Uvh ./AmazonAthenaODBC-2.0.3.0.rpm
-
-RUN ls -lht /opt/athena/odbc/ini/
+# install AWS Athena ODBC driver (Linux)
+#RUN dnf install -y \
+#    gzip libXcomposite libXcursor libXdamage libXext libXi libXrandr libXScrnSaver libXt libXtst tar wget
+#
+#RUN wget -q https://rpmfind.net/linux/openmandriva/5.0/repository/aarch64/main/release/lib64unixODBC2-2.3.12-1-omv2390.aarch64.rpm
+#RUN yes | rpm -Uvh ./lib64unixODBC2-2.3.12-1-omv2390.aarch64.rpm
+#
+#RUN wget -q https://ftp.gnu.org/gnu/glibc/glibc-2.40.tar.gz
+#RUN ls -lht
+#RUN tar -xvzf glibc-2.40.tar.gz
+#
+#RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz
+#RUN tar -xvzf unixODBC-2.3.12.tar.gz
+#
+#RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Linux/AmazonAthenaODBC-2.0.3.0.rpm
+#RUN yes | rpm -Uvh ./AmazonAthenaODBC-2.0.3.0.rpm
+#
+#RUN ls -lht /opt/athena/odbc/ini/
 
 # copy application code
 COPY handler.py handler.py
