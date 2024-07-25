@@ -1,22 +1,26 @@
 FROM amazon/aws-lambda-python:3.12
 
 # install odbc dependencies
-RUN dnf install -y gcc gzip libX11 libX11-common tar wget
+RUN dnf install -y gcc gzip libX11 libXext tar wget
 
 # install unixODBC
-RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz
-RUN tar -xzf ./unixODBC-2.3.12.tar.gz
-RUN cd unixODBC-2.3.12 && ./configure \
+RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz \
+    && tar -xzf ./unixODBC-2.3.12.tar.gz \
+    && cd unixODBC-2.3.12 \
+    && ./configure \
     --disable-drivers \
     --disable-gui \
     --enable-iconv \
     --prefix=/home \
     --sysconfdir=/var/task \
     --with-iconv-char-enc=UTF8 \
-    --with-iconv-ucode-enc=UTF16LE
+    --with-iconv-ucode-enc=UTF16LE \
+    && make install \
+    && cd .. \
+    && mv /home/* . \
+    && mv unixODBC-2.3.12 unixODBC-2.3.12.tar.gz /tmp \
 
-RUN cd unixODBC-2.3.12 && make install
-RUN mv /home/* .
+RUN odbcinst -j
 
 # install AmazonAthenaODBC
 RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Linux/AmazonAthenaODBC-2.0.3.0.rpm
