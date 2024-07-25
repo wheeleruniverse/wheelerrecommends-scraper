@@ -21,6 +21,11 @@ RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz \
     && mv unixODBC-2.3.12 unixODBC-2.3.12.tar.gz /tmp
 
 RUN ls -lht
+RUN ls -lht ODBCDataSources
+RUN ls -lht include
+RUN ls -lht lib
+RUN ls -lht share
+RUN ls -lht bin
 
 RUN odbcinst -j
 
