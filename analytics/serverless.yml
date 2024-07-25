@@ -12,8 +12,14 @@ functions:
 package:
   exclude:
     - venv/**
+      # athena:GetWorkGroup
 
 provider:
+  iamRoleStatements:
+    - Action:
+        - 'athena:GetWorkGroup'
+      Effect: Allow
+      Resource: '*'
   name: aws
 
 service: wheelerrecommends-scraper-analytics
