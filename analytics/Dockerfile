@@ -18,7 +18,7 @@ RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz \
     && make install \
     && cd .. \
     && mv /home/* . \
-    && mv unixODBC-2.3.12 unixODBC-2.3.12.tar.gz /tmp \
+    && mv unixODBC-2.3.12 unixODBC-2.3.12.tar.gz /tmp
 
 RUN odbcinst -j
 
