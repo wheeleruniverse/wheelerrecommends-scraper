@@ -29,8 +29,6 @@ COPY odbcinst.ini odbcinst.ini
 RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Linux/AmazonAthenaODBC-2.0.3.0.rpm
 RUN yes | rpm -Uvh --nodeps ./AmazonAthenaODBC-2.0.3.0.rpm
 
-RUN ./bin/isql -v "athena_odbc"
-
 # install python dependencies
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
