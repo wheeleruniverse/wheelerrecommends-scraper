@@ -1,7 +1,7 @@
 FROM amazon/aws-lambda-python:3.12
 
 # install odbc dependencies
-RUN dnf install -y gcc gzip tar wget
+RUN dnf install -y gcc gzip libx11-dev tar wget
 
 # install unixODBC
 RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz
