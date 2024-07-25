@@ -18,6 +18,7 @@ provider:
   iamRoleStatements:
     - Action:
         - 'athena:GetWorkGroup'
+        - 'athena:StartQueryExecution'
       Effect: Allow
       Resource: '*'
   name: aws
