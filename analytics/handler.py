@@ -2,7 +2,7 @@
 import json
 import pyodbc
 
-connection_string = 'athena_odbc'
+connection_string = 'DRIVER={Amazon Athena ODBC (x64)};'
 
 
 def main(event, context):
