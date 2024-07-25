@@ -18,16 +18,8 @@ RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz \
     && make install \
     && cd .. \
     && mv /home/* . \
-    && mv unixODBC-2.3.12 unixODBC-2.3.12.tar.gz /tmp
-
-RUN ls -lht
-RUN ls -lht ODBCDataSources
-RUN ls -lht include
-RUN ls -lht lib
-RUN ls -lht share
-RUN ls -lht bin
-
-RUN odbcinst -j
+    && mv unixODBC-2.3.12 unixODBC-2.3.12.tar.gz /tmp \
+    && ./bin/odbcinst -j
 
 # install AmazonAthenaODBC
 RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Linux/AmazonAthenaODBC-2.0.3.0.rpm

@@ -11,7 +11,7 @@ functions:
            page: home
            view_more_clicks: 9
      - schedule:
-         rate: cron(45 * * * ? *)
+         rate: rate(9 minutes)
          enabled: true
          input:
            page: movie_details

@@ -1,9 +1,5 @@
 FROM amazon/aws-lambda-python:3.12
 
-# install python dependencies
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
 # install chrome dependencies
 RUN dnf install -y \
     alsa-lib at-spi2-atk atk cups-libs dbus-glib dbus-glib-devel gtk3 jq libXcomposite libXcursor libXdamage libXext \
@@ -15,6 +11,10 @@ RUN ls -lht
 RUN chmod +x chrome-installer.sh
 RUN ls -lht
 RUN ./chrome-installer.sh
+
+# install python dependencies
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
 # copy application code
 COPY classes/ classes
