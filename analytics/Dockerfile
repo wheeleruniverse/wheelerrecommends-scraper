@@ -22,8 +22,8 @@ RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz \
     && ./bin/odbcinst -j
 
 # copy odbc config files
-RUN cp odbc.ini odbc.ini
-RUN cp odbcinst.ini odbcinst.ini
+COPY odbc.ini odbc.ini
+COPY odbcinst.ini odbcinst.ini
 RUN ./bin/odbcinst -j
 
 # install AmazonAthenaODBC
