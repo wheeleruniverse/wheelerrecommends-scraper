@@ -5,8 +5,9 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # install AWS Athena ODBC driver (Windows w/ Wine)
+RUN dnf install -y dnf-plugins-core wget
 RUN dnf config-manager --add-repo https://dl.winehq.org/wine-builds/fedora/40/winehq.repo
-RUN dnf install -y wget winehq-stable
+RUN dnf install -y winehq-stable
 
 RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Windows/AmazonAthenaODBC-2.0.3.0.msi
 RUN wine msiexec /i ./AmazonAthenaODBC-2.0.3.0.msi
