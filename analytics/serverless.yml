@@ -7,18 +7,19 @@ functions:
       - httpApi: 'GET /'
     image:
       uri: ${aws:accountId}.dkr.ecr.${aws:region}.amazonaws.com/wheelerrecommends-scraper-analytics:${param:sha}
-    timeout: 10
+    timeout: 60
 
 package:
   exclude:
     - venv/**
-      # athena:GetWorkGroup
 
 provider:
   iamRoleStatements:
     - Action:
+        - 'athena:GetQueryResultsStream'
         - 'athena:GetWorkGroup'
         - 'athena:StartQueryExecution'
+        - 's3:GetBucketLocation'
       Effect: Allow
       Resource: '*'
   name: aws
