@@ -1,4 +1,4 @@
-FROM amazon/aws-lambda-python:3.12
+FROM --platform=linux/arm64 amazon/aws-lambda-python:3.12
 
 # install odbc dependencies
 RUN dnf install -y gcc gzip libX11 libXext tar wget
@@ -35,11 +35,11 @@ ENV ODBCSYSINI=/opt/athena/odbc/ini
 RUN ./bin/odbcinst -j
 
 # install python dependencies
-COPY requirements.txt requirements.txt
+COPY requirements.txt ${LAMBDA_TASK_ROOT}
 RUN pip install -r requirements.txt
 
 # copy application code
-COPY handler.py handler.py
+COPY handler.py ${LAMBDA_TASK_ROOT}
 
 # define the handler
 CMD [ "handler.main" ]
