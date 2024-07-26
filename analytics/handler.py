@@ -33,7 +33,6 @@ def __query_home_page():
     cursor = connection.cursor()
     print(f"analytics-FBC89168C99045BBB8EF17: cursor: {cursor}")
 
-    data = []
     try:
         cursor.execute(
             'select'
@@ -50,21 +49,8 @@ def __query_home_page():
             ' from home_page'
             ' limit 10;'
         )
-        print(f"analytics-7CC2586752304CF68452B4: cursor.rowcount: {cursor.rowcount}")
-
-        for row in cursor:
-            data.append({
-                'id': row[0],
-                'page_timestamp': row[1],
-                'page_url': row[2],
-                'view_more_clicks': row[3],
-                'recommendation_id': row[4],
-                'recommendation_idx': row[5],
-                'recommendation_link_details': row[6],
-                'recommendation_name': row[7],
-                'recommendation_poster': row[8],
-                'recommendation_timestamp': row[9],
-            })
+        cursor_records = list(cursor)
+        print(f"analytics-7CC2586752304CF68452B4: retrieved {len(cursor_records)} record(s) from cursor")
 
     finally:
         cursor.close()
@@ -73,7 +59,24 @@ def __query_home_page():
         connection.close()
         print(f"analytics-99CEE18CA2C74F498E70BD: connection closed")
 
-    return json.dumps(data, indent=4, sort_keys=True)
+    print(f"analytics-8E2911A304154F298B3489: mapping cursor_records to output_records")
+    output_records = []
+    for row in cursor_records:
+        output_records.append({
+            'id': row[0],
+            'page_timestamp': row[1],
+            'page_url': row[2],
+            'view_more_clicks': row[3],
+            'recommendation_id': row[4],
+            'recommendation_idx': row[5],
+            'recommendation_link_details': row[6],
+            'recommendation_name': row[7],
+            'recommendation_poster': row[8],
+            'recommendation_timestamp': row[9],
+        })
+
+    print(f"analytics-D9AF1C7D6F2B45CD9AAC31: mapping output_records to json")
+    return json.dumps(output_records, indent=4, sort_keys=True)
 
 
 def __override_connection_string(profile=None):
