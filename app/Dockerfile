@@ -7,10 +7,7 @@ RUN dnf install -y \
 
 # install chrome
 COPY chrome-installer.sh chrome-installer.sh
-RUN ls -lht
-RUN chmod +x chrome-installer.sh
-RUN ls -lht
-RUN ./chrome-installer.sh
+RUN chmod +x chrome-installer.sh && ./chrome-installer.sh
 
 # install python dependencies
 COPY requirements.txt requirements.txt

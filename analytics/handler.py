@@ -13,7 +13,7 @@ connection_string = (
 
 
 def main(event, context):
-    print(f"scraper-BC8521DA1A874F4E9A6DB5: wheelerrecommends-scraper-analytics: event: {event}, context: {context}")
+    print(f"analytics-BC8521DA1A874F4E9A6DB5: event: {event}, context: {context}")
     return __query_home_page()
 
 
@@ -25,8 +25,14 @@ def __query_home_page():
        str: JSON representation of the SQL query results.
     """
 
+    print(f"analytics-AD29A3EF2A874F8E9A6CZ1: connection_string: {connection_string}")
+
     connection = pyodbc.connect(connection_string)
+    print(f"analytics-722A353D70D14993BF96C5: connection: {connection}")
+
     cursor = connection.cursor()
+    print(f"analytics-FBC89168C99045BBB8EF17: cursor: {cursor}")
+
     data = []
     try:
         cursor.execute(
@@ -44,6 +50,8 @@ def __query_home_page():
             ' from home_page'
             ' limit 10;'
         )
+        print(f"analytics-7CC2586752304CF68452B4: cursor.rowcount: {cursor.rowcount}")
+
         for row in cursor:
             data.append({
                 'id': row[0],
@@ -60,7 +68,10 @@ def __query_home_page():
 
     finally:
         cursor.close()
+        print(f"analytics-50F66759700547E4B0F334: cursor closed")
+
         connection.close()
+        print(f"analytics-99CEE18CA2C74F498E70BD: connection closed")
 
     return json.dumps(data, indent=4, sort_keys=True)
 

@@ -21,8 +21,9 @@ RUN wget -q https://www.unixodbc.org/unixODBC-2.3.12.tar.gz \
     && mv unixODBC-2.3.12 unixODBC-2.3.12.tar.gz /tmp
 
 # install AmazonAthenaODBC
-RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Linux/AmazonAthenaODBC-2.0.3.0.rpm
-RUN yes | rpm -Uvh --nodeps ./AmazonAthenaODBC-2.0.3.0.rpm
+RUN wget -q https://downloads.athena.us-east-1.amazonaws.com/drivers/ODBC/v2.0.3.0/Linux/AmazonAthenaODBC-2.0.3.0.rpm \
+    && yes | rpm -Uvh --nodeps ./AmazonAthenaODBC-2.0.3.0.rpm \
+    && rm AmazonAthenaODBC-2.0.3.0.rpm
 
 # copy odbc config files
 COPY odbc.ini /opt/athena/odbc/ini/odbc.ini
