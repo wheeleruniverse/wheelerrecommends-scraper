@@ -5,6 +5,7 @@ on:
     branches:
       - master
     paths:
+      - .github/workflows/analytics.yml
       - analytics/**
 
   workflow_dispatch:
