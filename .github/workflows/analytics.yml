@@ -38,7 +38,7 @@ jobs:
 
       - name: Install QEMU
         run: |
-          apt-get install -y qemu qemu-user-static
+          sudo apt-get install -y qemu qemu-user-static
 
       - name: Docker Build
         run: |
