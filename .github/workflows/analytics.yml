@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - .github/workflows/
+      - .github/workflows/**
       - analytics/**
 
   workflow_dispatch:
@@ -37,14 +37,9 @@ jobs:
           aws ecr get-login-password --region ${{ env.AWS_REGION }} \
           | docker login --username AWS --password-stdin "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
 
-      - name: Install QEMU
-        run: |
-          sudo apt-get install -y qemu qemu-user-static
-
       - name: Docker Build
         run: |
-          docker buildx ls
-          docker buildx build --no-cache --platform=linux/arm64 -t ${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
+          docker build --no-cache -t ${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
 
       - name: Docker Tag
         run: |
