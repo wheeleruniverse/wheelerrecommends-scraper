@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 amazon/aws-lambda-python:3.12
+FROM --platform=linux/arm64 public.ecr.aws/lambda/python:3.12
 
 # install odbc dependencies
 RUN dnf install -y gcc gzip libX11 libXext tar wget
