@@ -36,9 +36,14 @@ jobs:
           aws ecr get-login-password --region ${{ env.AWS_REGION }} \
           | docker login --username AWS --password-stdin "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
 
+      - name: Install QEMU
+        run: |
+          apt-get install -y qemu qemu-user-static
+
       - name: Docker Build
         run: |
-          docker build --no-cache --platform=linux/arm64 -t ${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
+          docker buildx ls
+          docker buildx build --no-cache --platform=linux/arm64 -t ${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
 
       - name: Docker Tag
         run: |
