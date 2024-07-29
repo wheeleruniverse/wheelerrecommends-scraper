@@ -10,11 +10,8 @@ functions:
     memorySize: 1024
     timeout: 300
   test:
-    events:
-      - httpApi: 'GET /'
     handler: test.main
-    memorySize: 1024
-    timeout: 300
+    runtime: python3.12
 
 package:
   exclude:
