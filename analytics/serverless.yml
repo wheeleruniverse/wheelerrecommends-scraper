@@ -9,6 +9,12 @@ functions:
       uri: ${aws:accountId}.dkr.ecr.${aws:region}.amazonaws.com/wheelerrecommends-scraper-analytics:${param:sha}
     memorySize: 1024
     timeout: 300
+  test:
+    events:
+      - httpApi: 'GET /'
+    handler: test.main
+    memorySize: 1024
+    timeout: 300
 
 package:
   exclude:
