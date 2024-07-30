@@ -29,7 +29,7 @@ provider:
         - athena:GetWorkGroup
         - athena:StartQueryExecution
         - athena:StopQueryExecution
-      Resource: *
+      Resource: '*'
     - Effect: Allow
       Action:
         - glue:GetDatabase
