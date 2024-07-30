@@ -19,44 +19,44 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - 'athena:GetDatabase'
-        - 'athena:GetDataCatalog'
-        - 'athena:GetQueryExecution'
-        - 'athena:GetQueryResults'
-        - 'athena:GetQueryResultsStream'
-        - 'athena:GetTable'
-        - 'athena:GetTableMetadata'
-        - 'athena:GetWorkGroup'
-        - 'athena:StartQueryExecution'
-        - 'athena:StopQueryExecution'
-      Resource: '*'
+        - athena:GetDatabase
+        - athena:GetDataCatalog
+        - athena:GetQueryExecution
+        - athena:GetQueryResults
+        - athena:GetQueryResultsStream
+        - athena:GetTable
+        - athena:GetTableMetadata
+        - athena:GetWorkGroup
+        - athena:StartQueryExecution
+        - athena:StopQueryExecution
+      Resource: *
     - Effect: Allow
       Action:
-        - 'glue:GetDatabase'
-        - 'glue:GetTable'
-        - 'glue:GetPartition'
-        - 'glue:GetPartitions'
+        - glue:GetDatabase
+        - glue:GetTable
+        - glue:GetPartition
+        - glue:GetPartitions
       Resource:
-        - 'arn:aws:glue:us-east-1:123456789012:catalog'
-        - 'arn:aws:glue:us-east-1:123456789012:database/wheelerrecommends-scraper-database'
-        - 'arn:aws:glue:us-east-1:123456789012:table/wheelerrecommends-scraper-database/home_page'
-        - 'arn:aws:glue:us-east-1:123456789012:table/wheelerrecommends-scraper-database/movie_details_page'
+        - arn:aws:glue:${aws:region}:${aws:accountId}:catalog
+        - arn:aws:glue:${aws:region}:${aws:accountId}:database/wheelerrecommends-scraper-database
+        - arn:aws:glue:${aws:region}:${aws:accountId}:table/wheelerrecommends-scraper-database/home_page
+        - arn:aws:glue:${aws:region}:${aws:accountId}:table/wheelerrecommends-scraper-database/movie_details_page
     - Effect: Allow
       Action:
-        - 's3:GetBucketLocation'
-        - 's3:ListBucket'
-        - 's3:GetObject'
+        - s3:GetBucketLocation
+        - s3:ListBucket
+        - s3:GetObject
       Resource:
-        - 'arn:aws:s3:::wheelerrecommends-scraper-data/*'
-        - 'arn:aws:s3:::wheelerrecommends-scraper-data'
+        - arn:aws:s3:::wheelerrecommends-scraper-data/*
+        - arn:aws:s3:::wheelerrecommends-scraper-data
     - Effect: Allow
       Action:
-        - 's3:GetBucketLocation'
-        - 's3:ListBucket'
-        - 's3:GetObject'
-        - 's3:PutObject'
+        - s3:GetBucketLocation
+        - s3:ListBucket
+        - s3:GetObject
+        - s3:PutObject
       Resource:
-        - 'arn:aws:s3:::wheelerrecommends-scraper-logs/*'
-        - 'arn:aws:s3:::wheelerrecommends-scraper-logs'
+        - arn:aws:s3:::wheelerrecommends-scraper-logs/*
+        - arn:aws:s3:::wheelerrecommends-scraper-logs
 
 service: wheelerrecommends-scraper-analytics
