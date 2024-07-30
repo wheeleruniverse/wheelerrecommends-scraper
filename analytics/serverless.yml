@@ -9,9 +9,6 @@ functions:
       uri: ${aws:accountId}.dkr.ecr.${aws:region}.amazonaws.com/wheelerrecommends-scraper-analytics:${param:sha}
     memorySize: 1024
     timeout: 300
-  test:
-    handler: test.main
-    runtime: python3.12
 
 package:
   exclude:
@@ -20,10 +17,19 @@ package:
 provider:
   iamRoleStatements:
     - Action:
-        - 'athena:GetQueryResultsStream'
-        - 'athena:GetWorkGroup'
-        - 'athena:StartQueryExecution'
         - 's3:GetBucketLocation'
+        - 's3:ListBucket'
+        - 's3:GetObject'
+        - 's3:PutObject'
+        - 'athena:GetWorkGroup'
+        - 'athena:GetDatabase'
+        - 'athena:GetQueryResults'
+        - 'athena:GetTable'
+        - 'athena:StartQueryExecution'
+        - 'glue:GetDatabase'
+        - 'glue:GetTable'
+        - 'glue:GetPartition'
+        - 'glue:GetPartitions'
       Effect: Allow
       Resource: '*'
   name: aws
