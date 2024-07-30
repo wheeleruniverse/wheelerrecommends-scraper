@@ -15,23 +15,35 @@ package:
     - venv/**
 
 provider:
+  name: aws
   iamRoleStatements:
-    - Action:
-        - 's3:GetBucketLocation'
-        - 's3:ListBucket'
-        - 's3:GetObject'
-        - 's3:PutObject'
-        - 'athena:GetWorkGroup'
+    - Effect: Allow
+      Action:
+        - 'athena:BatchGetQueryExecution'
         - 'athena:GetDatabase'
+        - 'athena:GetDataCatalog'
+        - 'athena:GetQueryExecution'
         - 'athena:GetQueryResults'
+        - 'athena:GetQueryResultsStream'
         - 'athena:GetTable'
+        - 'athena:GetTableMetadata'
+        - 'athena:GetWorkGroup'
+        - 'athena:ListDatabases'
+        - 'athena:ListDataCatalogs'
+        - 'athena:ListEngineVersions'
+        - 'athena:ListQueryExecutions'
+        - 'athena:ListTableMetadata'
+        - 'athena:ListWorkGroups'
         - 'athena:StartQueryExecution'
+        - 'athena:StopQueryExecution'
         - 'glue:GetDatabase'
         - 'glue:GetTable'
         - 'glue:GetPartition'
         - 'glue:GetPartitions'
-      Effect: Allow
+        - 's3:GetBucketLocation'
+        - 's3:ListBucket'
+        - 's3:GetObject'
+        - 's3:PutObject'
       Resource: '*'
-  name: aws
 
 service: wheelerrecommends-scraper-analytics
