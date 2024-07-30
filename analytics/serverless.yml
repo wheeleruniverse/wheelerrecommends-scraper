@@ -7,8 +7,8 @@ functions:
       - httpApi: 'GET /'
     image:
       uri: ${aws:accountId}.dkr.ecr.${aws:region}.amazonaws.com/wheelerrecommends-scraper-analytics:${param:sha}
-    memorySize: 1024
-    timeout: 300
+    memorySize: 2048
+    timeout: 28
 
 package:
   exclude:
@@ -19,7 +19,6 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - 'athena:BatchGetQueryExecution'
         - 'athena:GetDatabase'
         - 'athena:GetDataCatalog'
         - 'athena:GetQueryExecution'
@@ -28,22 +27,36 @@ provider:
         - 'athena:GetTable'
         - 'athena:GetTableMetadata'
         - 'athena:GetWorkGroup'
-        - 'athena:ListDatabases'
-        - 'athena:ListDataCatalogs'
-        - 'athena:ListEngineVersions'
-        - 'athena:ListQueryExecutions'
-        - 'athena:ListTableMetadata'
-        - 'athena:ListWorkGroups'
         - 'athena:StartQueryExecution'
         - 'athena:StopQueryExecution'
+      Resource: '*'
+    - Effect: Allow
+      Action:
         - 'glue:GetDatabase'
         - 'glue:GetTable'
         - 'glue:GetPartition'
         - 'glue:GetPartitions'
+      Resource:
+        - 'arn:aws:glue:us-east-1:123456789012:catalog'
+        - 'arn:aws:glue:us-east-1:123456789012:database/wheelerrecommends-scraper-database'
+        - 'arn:aws:glue:us-east-1:123456789012:table/wheelerrecommends-scraper-database/home_page'
+        - 'arn:aws:glue:us-east-1:123456789012:table/wheelerrecommends-scraper-database/movie_details_page'
+    - Effect: Allow
+      Action:
+        - 's3:GetBucketLocation'
+        - 's3:ListBucket'
+        - 's3:GetObject'
+      Resource:
+        - 'arn:aws:s3:::wheelerrecommends-scraper-data/*'
+        - 'arn:aws:s3:::wheelerrecommends-scraper-data'
+    - Effect: Allow
+      Action:
         - 's3:GetBucketLocation'
         - 's3:ListBucket'
         - 's3:GetObject'
         - 's3:PutObject'
-      Resource: '*'
+      Resource:
+        - 'arn:aws:s3:::wheelerrecommends-scraper-logs/*'
+        - 'arn:aws:s3:::wheelerrecommends-scraper-logs'
 
 service: wheelerrecommends-scraper-analytics
