@@ -22,7 +22,7 @@ class Page(Enum):
 def main(event, context):
     print(f"analytics-BC8521DA1A874F4E9A6DB5: event: {event}, context: {context}")
 
-    query_strings = event.queryStringParameters if event is not None else {}
+    query_strings = event['queryStringParameters'] if 'queryStringParameters' in event else {}
 
     page = query_strings['page'] if 'page' in event.queryStringParameter else Page.HOME
 
