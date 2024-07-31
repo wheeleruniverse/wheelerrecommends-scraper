@@ -33,9 +33,9 @@ provider:
     - Effect: Allow
       Action:
         - glue:GetDatabase
-        - glue:GetTable
         - glue:GetPartition
         - glue:GetPartitions
+        - glue:GetTable
       Resource:
         - arn:aws:glue:${aws:region}:${aws:accountId}:catalog
         - arn:aws:glue:${aws:region}:${aws:accountId}:database/wheelerrecommends-scraper-database
@@ -44,16 +44,16 @@ provider:
     - Effect: Allow
       Action:
         - s3:GetBucketLocation
-        - s3:ListBucket
         - s3:GetObject
+        - s3:ListBucket
       Resource:
         - arn:aws:s3:::wheelerrecommends-scraper-data/*
         - arn:aws:s3:::wheelerrecommends-scraper-data
     - Effect: Allow
       Action:
         - s3:GetBucketLocation
-        - s3:ListBucket
         - s3:GetObject
+        - s3:ListBucket
         - s3:PutObject
       Resource:
         - arn:aws:s3:::wheelerrecommends-scraper-logs/*
