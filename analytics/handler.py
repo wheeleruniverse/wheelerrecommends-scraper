@@ -24,7 +24,8 @@ def main(event, context):
 
     query_strings = event['queryStringParameters'] if 'queryStringParameters' in event else {}
 
-    page = query_strings['page'] if 'page' in query_strings else Page.HOME
+    page = query_strings['page'] if 'page' in query_strings else 'home'
+    page = Page[page.upper()]
 
     limit = query_strings['limit'] if 'limit' in query_strings else 10
     limit = limit if limit < 101 else 100
@@ -35,7 +36,7 @@ def main(event, context):
         'body': __query(page, limit),
         'date': datetime.datetime.now().isoformat(),
         'request': {
-          'page': page.value,
+          'page': page.name.lower(),
           'limit': limit,
         }
     }
