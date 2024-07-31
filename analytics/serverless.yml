@@ -12,7 +12,7 @@ functions:
 
 package:
   exclude:
-    - venv/**
+    - .venv/**
 
 provider:
   name: aws

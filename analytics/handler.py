@@ -1,4 +1,3 @@
-
 import datetime
 import pyodbc
 
@@ -15,8 +14,8 @@ connection_string = (
 
 
 class Page(Enum):
-    HOME = 1
-    MOVIE_DETAILS = 2
+    HOME = 'home'
+    MOVIE_DETAILS = 'movie_details'
 
 
 def main(event, context):
@@ -24,20 +23,32 @@ def main(event, context):
 
     query_strings = event['queryStringParameters'] if 'queryStringParameters' in event else {}
 
-    page = query_strings['page'] if 'page' in query_strings else 'home'
-    page = Page[page.upper()]
+    try:
+        page = Page[query_strings['page'].strip().upper()] if 'page' in query_strings else Page.HOME
 
-    limit = query_strings['limit'] if 'limit' in query_strings else 10
-    limit = limit if limit < 101 else 100
-    if limit > 100:
-        limit = 100
+    except KeyError:
+        return {
+            'error': f"expected 'page' to be in {[x.value for x in list(Page)]}, but was '{query_strings['page']}'",
+            'date': datetime.datetime.now().isoformat()
+        }
+
+    limit = int(query_strings['limit']) if 'limit' in query_strings else 10
+    if limit > 100 or limit < 1:
+        return {
+            'error': f"expected 'limit' between 1-100, but was {limit}",
+            'date': datetime.datetime.now().isoformat(),
+            'request': {
+                'page': page.value,
+                'limit': limit,
+            }
+        }
 
     return {
         'body': __query(page, limit),
         'date': datetime.datetime.now().isoformat(),
         'request': {
-          'page': page.name.lower(),
-          'limit': limit,
+            'page': page.value,
+            'limit': limit,
         }
     }
 
@@ -209,8 +220,55 @@ def __query_movie_details_page(cursor, limit):
 
 
 if __name__ == '__main__':
-
     __override_connection_string('wheelers-websites')
 
-    print(f"__query(Page.HOME): {__query(page=Page.HOME, limit=1)}")
-    print(f"__query(Page.MOVIE_DETAILS): {__query(page=Page.MOVIE_DETAILS, limit=1)}")
+    sample = {
+        'queryStringParameters': {}
+    }
+    print(f"main()\n{main(sample, None)}")
+
+    sample = {
+        'queryStringParameters': {
+            'page': 'home',
+            'limit': '1',
+        }
+    }
+    print(f"main(page=home,limit=1)\n{main(sample, None)}")
+
+    sample = {
+        'queryStringParameters': {
+            'page': 'HOME',
+            'limit': '1000',
+        }
+    }
+    print(f"main(page=HOME,limit=1000)\n{main(sample, None)}")
+
+    sample = {
+        'queryStringParameters': {
+            'page': ' home ',
+        }
+    }
+    print(f"main(page= home )\n{main(sample, None)}")
+
+    sample = {
+        'queryStringParameters': {
+            'page': 'movie_details',
+            'limit': '2',
+        }
+    }
+    print(f"main(page=movie_details,limit=2)\n{main(sample, None)}")
+
+    sample = {
+        'queryStringParameters': {
+            'page': 'MOVIE_DETAILS',
+            'limit': '-1',
+        }
+    }
+    print(f"main(page=MOVIE_DETAILS,limit=-1)\n{main(sample, None)}")
+
+    sample = {
+        'queryStringParameters': {
+            'page': 'invalid_page',
+        }
+    }
+    print(f"main(page=invalid_page)\n{main(sample, None)}")

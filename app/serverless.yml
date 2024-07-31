@@ -23,7 +23,7 @@ functions:
 
 package:
   exclude:
-    - venv/**
+    - .venv/**
 
 provider:
   iamRoleStatements:
