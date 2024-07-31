@@ -24,9 +24,9 @@ def main(event, context):
 
     query_strings = event['queryStringParameters'] if 'queryStringParameters' in event else {}
 
-    page = query_strings['page'] if 'page' in event.queryStringParameter else Page.HOME
+    page = query_strings['page'] if 'page' in query_strings else Page.HOME
 
-    limit = query_strings['limit'] if 'limit' in event.queryStringParameters else 10
+    limit = query_strings['limit'] if 'limit' in query_strings else 10
     limit = limit if limit < 101 else 100
     if limit > 100:
         limit = 100
