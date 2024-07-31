@@ -1,5 +1,4 @@
 
-import json
 import pyodbc
 
 connection_string = (
@@ -28,10 +27,8 @@ def __query_home_page():
     print(f"analytics-AD29A3EF2A874F8E9A6CZ1: connection_string: {connection_string}")
 
     connection = pyodbc.connect(connection_string)
-    print(f"analytics-722A353D70D14993BF96C5: connection: {connection}")
-
     cursor = connection.cursor()
-    print(f"analytics-FBC89168C99045BBB8EF17: cursor: {cursor}")
+    print(f"analytics-722A353D70D14993BF96C5: connection established")
 
     try:
         cursor.execute(
@@ -54,12 +51,9 @@ def __query_home_page():
 
     finally:
         cursor.close()
-        print(f"analytics-50F66759700547E4B0F334: cursor closed")
-
         connection.close()
         print(f"analytics-99CEE18CA2C74F498E70BD: connection closed")
 
-    print(f"analytics-8E2911A304154F298B3489: mapping cursor_records to output_records")
     output_records = []
     for row in cursor_records:
         output_records.append({
@@ -75,8 +69,7 @@ def __query_home_page():
             'recommendation_timestamp': row[9],
         })
 
-    print(f"analytics-D9AF1C7D6F2B45CD9AAC31: mapping output_records to json")
-    return json.dumps(output_records, indent=4, sort_keys=True)
+    return output_records
 
 
 def __override_connection_string(profile=None):
